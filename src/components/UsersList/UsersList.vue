@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { UserListProps } from '@/components/UsersList/users-list.model'
+import { useAppStore } from '@/store/app'
+import { computed } from 'vue'
 
 defineProps<UserListProps>()
+const users = computed(()=>useAppStore().filteredUsers)
 </script>
 <template>
-  <v-card :loading="loading" class="mx-auto">
+  <v-card class="mx-auto">
     <v-toolbar color="cyan-lighten-1">
       <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-toolbar>
@@ -25,6 +28,7 @@ defineProps<UserListProps>()
               location="top center"
               origin="auto"
               no-click-animation
+              :open-on-click="true"
             >
               <template v-slot:activator="{props}">
                 <div class="v-list-item__prepend">

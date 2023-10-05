@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { UserFilterProps } from '@/components/UserFilter/user-filter.model'
+import { useAppStore } from '@/store/app'
 
 const props = defineProps<UserFilterProps>()
 
-const emit = defineEmits(["selectFilter"]);
 const updateValue = (event:string | null) => {
-  emit("selectFilter", {idx: props.idx, value:event});
+  useAppStore().selectFilter({idx: props.idx, value:event})
 };
 </script>
 <template>

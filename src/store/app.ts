@@ -1,9 +1,11 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import IUser from '@/types/user.type'
 import usersData from '@/data/index'
 import API from '@/utils/api'
+import { SelectFilter } from '@/components/UserFilter/user-filter.model'
+import IFilters from '@/types/filters.type'
 
 const countryOptions = [
   'russia',
@@ -20,7 +22,7 @@ export const useAppStore = defineStore('app', () => {
     users.value = await API.getUsers()
   }
 
-  const filters = ref([
+  const filters = ref<IFilters[]>([
     {
       name: 'Score',
       value: '',
@@ -30,9 +32,24 @@ export const useAppStore = defineStore('app', () => {
     { name: 'Country', value: '', options: countryOptions, getter: (obj: IUser, value: string) => obj.country == value }
   ])
 
+  const filteredUsers = computed(() => {
+    return filters.value.reduce((initialValue, { value, getter }) => {
+      return value
+        ? initialValue.filter(n => getter(n, value))
+        : initialValue
+    }, users.value)
+  })
+
+  const selectFilter = ({ idx, value }: SelectFilter) => {
+    filters.value[idx].value = value
+  }
+
   return {
     users,
+    filteredUsers,
     filters,
-    getUsers
+
+    getUsers,
+    selectFilter,
   }
 })

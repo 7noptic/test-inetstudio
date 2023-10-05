@@ -1,5 +1,5 @@
 interface UserFilterProps {
-  value: string
+  value: string | null
   items: string[]
   label: string,
   idx: number
@@ -7,7 +7,7 @@ interface UserFilterProps {
 
 interface SelectFilter {
   idx: number,  // знать позицию фильтра в массиве
-  value: UserFilterProps['value']
+  value: UserFilterProps['value'] | null
 }
 
 export type {
